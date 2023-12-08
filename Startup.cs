@@ -6,8 +6,15 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace MYRTEXTestProject
 {
+    /// <summary>
+    /// Класс Startup используется для настройки приложения и конфигурации HTTP-запросов.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Этот метод вызывается во время выполнения для добавления сервисов в контейнер сервисов.
+        /// </summary>
+        /// <param name="services">Коллекция сервисов для конфигурации.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSpaStaticFiles(configuration =>
@@ -15,7 +22,11 @@ namespace MYRTEXTestProject
                 configuration.RootPath = "ClientApp/dist";
             });
         }
-
+        /// <summary>
+        /// Этот метод вызывается во время выполнения для настройки конвейера HTTP-запросов в приложении.
+        /// </summary>
+        /// <param name="app">Построитель приложений, используемый для настройки приложения.</param>
+        /// <param name="env">Предоставляет информацию об окружении веб-хостинга.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
