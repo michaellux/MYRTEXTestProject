@@ -2,9 +2,12 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'app',
-    template: `<label>Choose name:</label>
-                 <input [(ngModel)]="name" placeholder="name">
-                 <h2>Welcome {{name}}!</h2>`
+    template: `<ol class="breadcrumb">
+                  <li><a href="#">О компании</a></li>
+                  <li><a routerLink="employees">Сотрудники</a></li>
+               </ol>
+<router-outlet></router-outlet>
+`
 })
 export class AppComponent {
     name = '';
