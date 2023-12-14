@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MYRTEXTestProject.Models
 {
-    internal class Employee
+    public class Employee
     {
         public int Id { get; set; }
         public string Department { get; set; }

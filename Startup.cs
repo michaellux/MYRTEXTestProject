@@ -18,7 +18,7 @@ namespace MYRTEXTestProject
         /// <param name="services">Коллекция сервисов для конфигурации.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=employeesdb;Trusted_Connection=True;";
+            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=MYRTEXTestProjectEmployeesdb;Trusted_Connection=True;";
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
             services.AddControllers();
