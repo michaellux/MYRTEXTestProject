@@ -2,10 +2,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { EmployeesComponent } from './employees.component';
-
 @NgModule({
   declarations: [
-    EmployeesComponent
+      EmployeesComponent
   ],
   imports: [
       CommonModule,

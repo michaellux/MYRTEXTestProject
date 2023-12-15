@@ -2,15 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../data.service';
 import { Employee } from '../../employee';
 import { DepartmentFilter, NameFilter, BirthdayDateFilter, EmploymentDateFilter, SalaryFilter } from '../../filter';
+import { SortField, SortDirection } from '../../sort';
+import { orderBy } from 'lodash';
 @Component({
   selector: 'employees',
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.css'],
   providers: [DataService]
 })
+
 export class EmployeesComponent implements OnInit {
     employee: Employee = new Employee(); 
     employees: Employee[];
+    activeSortField: SortField = 'department';
+    activeSortDirection: SortDirection = 'asc';
+    isLoading: boolean = true;
+    loadingMessage: string = "Загрузка";
+    emptyMessage: string = 'Сотрудников нет';
 
     private _filterDepartment: string = '';
     get filterDepartment(): string {
@@ -64,14 +72,21 @@ export class EmployeesComponent implements OnInit {
     loadEmployees() {
         this.dataService.getEmployees()
             .subscribe((data: Employee[]) => {
-                this.employees = data
+                this.isLoading = false;
+                this.employees = data;
                 this.filteredEmployee = this.employees;
+                this.sort();
                 this.filterDepartment = '';
                 this.filterName = '';
                 this.filterBirthdayDate = null;
                 this.filterEmploymentDate = null;
                 this.filterSalary = '';
             });
+    }
+
+    filterHandler() {
+        this.filterEmployee();
+        this.sort();
     }
 
     filterEmployee() {
@@ -105,7 +120,23 @@ export class EmployeesComponent implements OnInit {
         if (this.filterSalary) {
             this.filteredEmployee = salaryFilter.filter(this.filteredEmployee, 'salary', this.filterSalary);
         }
+    }
 
+    changeSort(targetField: SortField) {
+        if (this.activeSortField === targetField) {
+            if (this.activeSortDirection === 'asc') {
+                this.activeSortDirection = 'desc';
+            }
+            else {
+                this.activeSortDirection = 'asc';
+            }
+        }
+        this.activeSortField = targetField;
+        this.sort()
+    }
+
+    sort() {
+        this.filteredEmployee = orderBy(this.filteredEmployee, [this.activeSortField], [this.activeSortDirection === 'asc' ? 'asc' : 'desc']);
     }
 
     save() {

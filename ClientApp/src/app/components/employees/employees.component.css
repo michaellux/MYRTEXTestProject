@@ -1,0 +1,29 @@
+.filter-block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.filter-block .dateLabel {
+    margin-right: 1rem;
+}
+.table__cell_header-sort {
+    opacity: 0;
+    margin-right: 0.5rem;
+}
+.table__cell.table__cell_header:hover .table__cell_header-sort {
+    display: inline-block;
+    opacity: 0.5;
+}
+.table__cell_header-sort_active {
+    opacity: 1;
+}
+.table__cell_header:not(:last-child):hover {
+    cursor: pointer;
+}
+.table__cell_header:hover .table__cell_header-content {
+    text-decoration: underline;
+}
+.message {
+    text-align: center;
+}
