@@ -69,8 +69,8 @@
                 <td>{{e.employmentDate | date:'dd.MM.yyyy'}}</td>
                 <td>{{e.salary}}</td>
                 <td>
-                    <button class="btn btn-sm" (click)="add(e)">Создать</button>
-                    <button class="btn btn-sm btn-primary" (click)="editProduct(e)">Редактировать</button>
+                    <button class="btn btn-sm" (click)="actionHandler(createEdit)">Создать</button>
+                    <button class="btn btn-sm btn-primary" (click)="openDialog(createEdit)">Редактировать</button>
                     <button class="btn btn-sm btn-danger" (click)="delete(e)">Удалить</button>
                 </td>
             </tr>
@@ -80,4 +80,45 @@
     <p class="message" *ngIf="isLoading">{{loadingMessage}}</p>
     <p class="message" *ngIf="!isLoading && filteredEmployee.length === 0">{{emptyMessage}}</p>
 </div>
+<dialog class="dialog dialog__create" #createEdit (click)="closeDialogOnClickOutside($event, createEdit)">
+    <form class="form" #createEditForm>
+        <div class="input-group form-group form__block-lg">
+            <label for="department">Отдел:</label><br>
+            <input [(ngModel)]="employee.department" required class="form-control" type="text" id="department" name="department" (input)="checkIsValidForm()"><br>
+            <div *ngIf="showErrors" [hidden]="employee.department !== ''" class="alert alert-danger">
+                Не указан отдел
+            </div>
+        </div>
+        <div class="input-group form-group form__block-lg">
+            <label for="name">Ф.И.О:</label><br>
+            <input [(ngModel)]="employee.name" required class="form-control" type="text" id="name" name="name" (input)="checkIsValidForm()"><br>
+            <div *ngIf="showErrors" [hidden]="employee.name !== ''" class="alert alert-danger">
+                Не указано Ф.И.О:
+            </div>
+        </div>
+        <div class="input-group form-group form__block">
+            <label for="birthdayDate">Дата рождения:</label><br>
+            <input [(ngModel)]="employee.birthdayDate" required class="form-control" type="date" id="birthdayDate" name="birthdayDate" (change)="checkIsValidForm()"><br>
+            <div *ngIf="showErrors" [hidden]="employee.birthdayDate !== undefined && employee.birthdayDate !== ''" class="alert alert-danger">
+                Не указана дата рождения:
+            </div>
+        </div>
+        <div class="input-group form-group form__block">
+            <label for="employmentDate">Дата устройства на работу:</label><br>
+            <input [(ngModel)]="employee.employmentDate" required class="form-control" type="date" id="employmentDate" name="employmentDate" (change)="checkIsValidForm()"><br>
+            <div *ngIf="showErrors" [hidden]="employee.employmentDate !== undefined && employee.employmentDate !== ''" class="alert alert-danger">
+                Не указана дата устройства на работу:
+            </div>
+        </div>
+        <div class="input-group form-group form__block">
+            <label for="salary">Заработная плата:</label><br>
+            <input min="1" [(ngModel)]="employee.salary" required class="form-control" type="number" id="salary" name="salary" (input)="checkIsValidForm()"><br>
+            <div *ngIf="showErrors" [hidden]="employee.salary !== null" class="alert alert-danger">
+                Не указана заработная плата:
+            </div>
+        </div>
+        <button [disabled]="hasErrors" class="btn btn-sm btn-primary" type="button" (click)="createHandler()">Подтвердить</button>
+        <button class="btn btn-sm btn-danger" type="button" (click)="closeDialog(createEdit)" value="cancel">Отмена</button>
+    </form>
+</dialog>
 

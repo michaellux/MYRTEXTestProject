@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataService } from '../../data.service';
 import { Employee } from '../../employee';
 import { DepartmentFilter, NameFilter, BirthdayDateFilter, EmploymentDateFilter, SalaryFilter } from '../../filter';
 import { SortField, SortDirection } from '../../sort';
 import { orderBy } from 'lodash';
+
+type Mode = 'create' | 'edit' | 'none';
+
 @Component({
   selector: 'employees',
   templateUrl: './employees.component.html',
@@ -19,6 +22,10 @@ export class EmployeesComponent implements OnInit {
     isLoading: boolean = true;
     loadingMessage: string = "Загрузка";
     emptyMessage: string = 'Сотрудников нет';
+    activeMode: Mode = 'none';
+    activeDialog: Object;
+    hasErrors: boolean = false;
+    showErrors: boolean = false;
 
     private _filterDepartment: string = '';
     get filterDepartment(): string {
@@ -62,6 +69,51 @@ export class EmployeesComponent implements OnInit {
     }
 
     filteredEmployee: Employee[] = [];
+
+    /*private _department: string = '';
+    get department(): string {
+        return this._department;
+    }
+    set department(value: string) {
+        this._department = value;
+        this.checkIsValidForm();
+    }
+
+    private _name: string = '';
+    get name(): string {
+        return this._name;
+    }
+    set name(value: string) {
+        this._name = value;
+        this.checkIsValidForm();
+    }
+
+    private _birthdayDate: Date;
+    get birthdayDate(): Date {
+        return this._birthdayDate;
+    }
+    set birthdayDate(value: Date) {
+        this._birthdayDate = value;
+        this.checkIsValidForm();
+    }
+
+    private _employmentDate: Date;
+    get employmentDate(): Date {
+        return this._employmentDate;
+    }
+    set employmentDate(value: Date) {
+        this._employmentDate = value;
+        this.checkIsValidForm();
+    }
+
+    private _salary: string = '';
+    get salary(): string {
+        return this._salary;
+    }
+    set salary(value: string) {
+        this._salary = value;
+        this.checkIsValidForm();
+    }*/
 
     constructor(private dataService: DataService) {}
 
@@ -139,27 +191,77 @@ export class EmployeesComponent implements OnInit {
         this.filteredEmployee = orderBy(this.filteredEmployee, [this.activeSortField], [this.activeSortDirection === 'asc' ? 'asc' : 'desc']);
     }
 
-    save() {
+    actionHandler(dialog: Object, activeEmployee?: Employee) {
+        if (activeEmployee) {
+            this.activeMode = 'edit';
+            this.employee = activeEmployee;
+        }
+        else {
+            this.activeMode = 'create';
+        }
+        this.activeDialog = dialog;
+        this.openDialog(this.activeDialog);
+    }
+
+    createHandler() {
+        this.showErrors = true;
+        if (this.checkIsValidForm()) {
+            this.create();
+            this.reset();
+            this.closeDialog(this.activeDialog);
+        }
+    }
+
+    checkIsValidForm() {
+        let result =
+            (this.employee.department !== '') &&
+            (this.employee.name !== '') &&
+            (this.employee.birthdayDate !== undefined && this.employee.birthdayDate !== '') &&
+            (this.employee.employmentDate !== undefined && this.employee.employmentDate !== '') &&
+            (this.employee.salary !== null);
+        this.hasErrors = !result;
+        return result;
+    }
+
+    openDialog(dialog) {
+        dialog.showModal();
+    }
+
+    closeDialog(dialog) {
+        this.showErrors = false;
+        dialog.close();
+    }
+
+    @ViewChild('createEditForm') createEditForm: ElementRef;
+    closeDialogOnClickOutside(event, dialog) {
+        if (event.target === dialog && !this.createEditForm.nativeElement.contains(event.target)) {
+            this.closeDialog(dialog);
+        }
+    }
+
+    create() {
         if (this.employee.id == null) {
+            delete this.employee.id;
             this.dataService.createEmployee(this.employee)
-                .subscribe((data: Employee) => this.employees.push(data));
+                .subscribe((data: Employee) => {
+                    this.employees.push(data);
+                    this.filterEmployee();
+                    this.sort();
+                }
+                );
         } else {
             this.dataService.updateProduct(this.employee)
                 .subscribe(data => this.loadEmployees());
         }
-        this.cancel();
     }
     editProduct(e: Employee) {
         this.employee = e;
     }
-    cancel() {
+    reset() {
         this.employee = new Employee();
     }
     delete(e: Employee) {
         this.dataService.deleteProduct(e.id)
             .subscribe(data => this.loadEmployees());
-    }
-    add() {
-        this.cancel();
     }
 }
