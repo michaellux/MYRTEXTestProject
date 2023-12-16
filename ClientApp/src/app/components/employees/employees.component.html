@@ -72,7 +72,7 @@
                     <div class="btn-group" role="group" aria-label="action-row">
                         <button class="btn btn-sm" (click)="actionHandler(createEdit)">Создать</button>
                         <button class="btn btn-sm btn-primary" (click)="actionHandler(createEdit, e)">Редактировать</button>
-                        <button class="btn btn-sm btn-danger" (click)="delete(e)">Удалить</button>
+                        <button class="btn btn-sm btn-danger" (click)="prepareToDeleteHandler(deleteconfirm, e)">Удалить</button>
                     </div>
                 </td>
             </tr>
@@ -125,4 +125,16 @@
         </div>
     </form>
 </dialog>
+
+<dialog class="dialog dialog__deleteconfirm" #deleteconfirm (click)="closeDialogOnClickOutside($event, deleteconfirm)">
+    <div class="form" #deleteconfirmMessageBlock>
+        <p>Вы действительно хотите удалить этого сотрудника?</p>
+        <div class="btn-group" role="group" aria-label="action-row">
+            <button [disabled]="hasErrors" class="btn btn-sm btn-primary" type="button" (click)="deleteHandler()">Подтвердить</button>
+            <button class="btn btn-sm btn-danger" type="button" (click)="cancelHandler()" value="cancel">Отмена</button>
+        </div>
+    </div>
+</dialog>
+
+
 

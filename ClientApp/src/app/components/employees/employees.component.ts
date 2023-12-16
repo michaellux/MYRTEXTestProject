@@ -5,7 +5,7 @@ import { DepartmentFilter, NameFilter, BirthdayDateFilter, EmploymentDateFilter,
 import { SortField, SortDirection } from '../../sort';
 import { orderBy } from 'lodash';
 
-type Mode = 'create' | 'edit' | 'none';
+type Mode = 'create' | 'edit' | 'delete' | 'none';
 
 @Component({
   selector: 'employees',
@@ -173,6 +173,7 @@ export class EmployeesComponent implements OnInit {
             this.create();
             this.reset();
             this.closeDialog(this.activeDialog);
+            this.showErrors = false;
         }
     }
 
@@ -190,7 +191,20 @@ export class EmployeesComponent implements OnInit {
     cancelHandler() {
         this.reset();
         this.closeDialog(this.activeDialog);
+        this.showErrors = false;
         this.loadEmployees()
+    }
+
+    prepareToDeleteHandler(dialog: Object, activeEmployee: Employee) {
+        this.activeMode = 'delete';
+        this.employee = activeEmployee;
+        this.activeDialog = dialog;
+        this.openDialog(this.activeDialog);
+    }
+
+    deleteHandler() {
+        this.delete();
+        this.closeDialog(this.activeDialog);
     }
 
     openDialog(dialog) {
@@ -198,15 +212,19 @@ export class EmployeesComponent implements OnInit {
     }
 
     closeDialog(dialog) {
-        this.showErrors = false;
         dialog.close();
     }
 
     @ViewChild('createEditForm') createEditForm: ElementRef;
+    @ViewChild('deleteconfirmMessageBlock') deleteconfirmMessageBlock: ElementRef;
     closeDialogOnClickOutside(event, dialog) {
-        if (event.target === dialog && !this.createEditForm.nativeElement.contains(event.target)) {
+        if (event.target === dialog && (
+            !this.createEditForm.nativeElement.contains(event.target) ||
+            !this.deleteconfirmMessageBlock.nativeElement.contains(event.target))
+        ) {
             this.reset();
             this.closeDialog(this.activeDialog);
+            this.showErrors = false;
             this.loadEmployees()
         }
     }
@@ -232,8 +250,8 @@ export class EmployeesComponent implements OnInit {
     reset() {
         this.employee = new Employee();
     }
-    delete(e: Employee) {
-        this.dataService.deleteProduct(e.id)
+    delete() {
+        this.dataService.deleteProduct(this.employee.id)
             .subscribe(data => this.loadEmployees());
     }
 }
