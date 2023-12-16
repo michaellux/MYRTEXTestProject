@@ -14,47 +14,6 @@ namespace MYRTEXTestProject.Controllers
         public EmployeeController(ApplicationContext context)
         {
             db = context;
-            if (!db.Employees.Any())
-            {
-                db.Employees.Add(new Employee { 
-                    Department = "Ритейл",
-                    Name = "Севастьянов Рефат Олегович",
-                    BirthdayDate = new DateTime(1986, 7, 20),
-                    EmploymentDate = new DateTime(2020, 1, 13),
-                    Salary = 79900M
-                });
-                db.Employees.Add(new Employee {
-                    Department = "Оптовый",
-                    Name = "Пафнутьева Ольга Семёновна",
-                    BirthdayDate = new DateTime(1992, 12, 14),
-                    EmploymentDate = new DateTime(2018, 7, 20),
-                    Salary = 49900M
-                });
-                db.Employees.Add(new Employee {
-                    Department = "Оптовый",
-                    Name = "Самойлов Сергей Игоревич",
-                    BirthdayDate = new DateTime(1977, 4, 1),
-                    EmploymentDate = new DateTime(2020, 3, 14),
-                    Salary = 52900M
-                });
-                db.Employees.Add(new Employee
-                {
-                    Department = "Розница",
-                    Name = "Постовой Геннадий Михайлович",
-                    BirthdayDate = new DateTime(1977, 4, 1),
-                    EmploymentDate = new DateTime(2020, 3, 14),
-                    Salary = 9000M
-                });
-                db.Employees.Add(new Employee
-                {
-                    Department = "Оптовый",
-                    Name = "Державина Агата Леонидовна",
-                    BirthdayDate = new DateTime(1947, 4, 1),
-                    EmploymentDate = new DateTime(2020, 3, 14),
-                    Salary = 90000M
-                });
-                db.SaveChanges();
-            }
         }
         [HttpGet]
         public IEnumerable<Employee> Get()

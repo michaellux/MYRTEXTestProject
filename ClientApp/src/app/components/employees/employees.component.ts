@@ -105,8 +105,6 @@ export class EmployeesComponent implements OnInit {
     }
 
     filterEmployee() {
-        console.log("filter");
-
         this.filteredEmployee = this.employees;
             
         let departmentFilter = new DepartmentFilter();
