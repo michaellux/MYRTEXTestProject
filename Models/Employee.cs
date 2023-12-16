@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace MYRTEXTestProject.Models
 {
+    /// <summary>
+    /// Класс Employee представляет собой модель сотрудника в компании. 
+    /// </summary>
     public class Employee
     {
         public int Id { get; set; }

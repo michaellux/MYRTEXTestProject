@@ -3,6 +3,9 @@ using System;
 
 namespace MYRTEXTestProject.Models
 {
+    /// <summary>
+    /// Класс контекста данных, представляющий сессию с базой данных
+    /// </summary>
     public class ApplicationContext : DbContext
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
@@ -10,7 +13,10 @@ namespace MYRTEXTestProject.Models
         {
             Database.EnsureCreated();
         }
-
+        /// <summary>
+        /// Метод, вызываемый при создании модели. Здесь мы настраиваем сущности и их связи
+        /// </summary>
+        /// <param name="modelBuilder">Построитель модели для настройки сущностей</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().HasData(

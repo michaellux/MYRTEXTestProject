@@ -242,9 +242,6 @@ export class EmployeesComponent implements OnInit {
                 .subscribe(data => this.loadEmployees());
         }
     }
-    editProduct(e: Employee) {
-        this.employee = e;
-    }
     reset() {
         this.employee = new Employee();
     }
