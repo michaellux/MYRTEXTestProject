@@ -37,6 +37,22 @@ namespace MYRTEXTestProject.Controllers
                     EmploymentDate = new DateTime(2020, 3, 14),
                     Salary = 52900M
                 });
+                db.Employees.Add(new Employee
+                {
+                    Department = "Розница",
+                    Name = "Постовой Геннадий Михайлович",
+                    BirthdayDate = new DateTime(1977, 4, 1),
+                    EmploymentDate = new DateTime(2020, 3, 14),
+                    Salary = 9000M
+                });
+                db.Employees.Add(new Employee
+                {
+                    Department = "Оптовый",
+                    Name = "Державина Агата Леонидовна",
+                    BirthdayDate = new DateTime(1947, 4, 1),
+                    EmploymentDate = new DateTime(2020, 3, 14),
+                    Salary = 90000M
+                });
                 db.SaveChanges();
             }
         }
