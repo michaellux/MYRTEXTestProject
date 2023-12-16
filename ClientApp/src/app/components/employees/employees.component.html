@@ -69,9 +69,11 @@
                 <td>{{e.employmentDate | date:'dd.MM.yyyy'}}</td>
                 <td>{{e.salary}}</td>
                 <td>
-                    <button class="btn btn-sm" (click)="actionHandler(createEdit)">Создать</button>
-                    <button class="btn btn-sm btn-primary" (click)="openDialog(createEdit)">Редактировать</button>
-                    <button class="btn btn-sm btn-danger" (click)="delete(e)">Удалить</button>
+                    <div class="btn-group" role="group" aria-label="action-row">
+                        <button class="btn btn-sm" (click)="actionHandler(createEdit)">Создать</button>
+                        <button class="btn btn-sm btn-primary" (click)="actionHandler(createEdit, e)">Редактировать</button>
+                        <button class="btn btn-sm btn-danger" (click)="delete(e)">Удалить</button>
+                    </div>
                 </td>
             </tr>
 
@@ -117,8 +119,10 @@
                 Не указана заработная плата:
             </div>
         </div>
-        <button [disabled]="hasErrors" class="btn btn-sm btn-primary" type="button" (click)="createHandler()">Подтвердить</button>
-        <button class="btn btn-sm btn-danger" type="button" (click)="closeDialog(createEdit)" value="cancel">Отмена</button>
+        <div class="btn-group" role="group" aria-label="action-item">
+            <button [disabled]="hasErrors" class="btn btn-sm btn-primary" type="button" (click)="createHandler()">Подтвердить</button>
+            <button class="btn btn-sm btn-danger" type="button" (click)="cancelHandler()" value="cancel">Отмена</button>
+        </div>
     </form>
 </dialog>
 

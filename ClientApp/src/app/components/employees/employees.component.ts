@@ -70,51 +70,6 @@ export class EmployeesComponent implements OnInit {
 
     filteredEmployee: Employee[] = [];
 
-    /*private _department: string = '';
-    get department(): string {
-        return this._department;
-    }
-    set department(value: string) {
-        this._department = value;
-        this.checkIsValidForm();
-    }
-
-    private _name: string = '';
-    get name(): string {
-        return this._name;
-    }
-    set name(value: string) {
-        this._name = value;
-        this.checkIsValidForm();
-    }
-
-    private _birthdayDate: Date;
-    get birthdayDate(): Date {
-        return this._birthdayDate;
-    }
-    set birthdayDate(value: Date) {
-        this._birthdayDate = value;
-        this.checkIsValidForm();
-    }
-
-    private _employmentDate: Date;
-    get employmentDate(): Date {
-        return this._employmentDate;
-    }
-    set employmentDate(value: Date) {
-        this._employmentDate = value;
-        this.checkIsValidForm();
-    }
-
-    private _salary: string = '';
-    get salary(): string {
-        return this._salary;
-    }
-    set salary(value: string) {
-        this._salary = value;
-        this.checkIsValidForm();
-    }*/
-
     constructor(private dataService: DataService) {}
 
     ngOnInit() {
@@ -126,6 +81,7 @@ export class EmployeesComponent implements OnInit {
             .subscribe((data: Employee[]) => {
                 this.isLoading = false;
                 this.employees = data;
+                this.prepare();
                 this.filteredEmployee = this.employees;
                 this.sort();
                 this.filterDepartment = '';
@@ -134,6 +90,13 @@ export class EmployeesComponent implements OnInit {
                 this.filterEmploymentDate = null;
                 this.filterSalary = '';
             });
+    }
+
+    prepare() {
+        this.employees.forEach((employee) => {
+            employee.birthdayDate = employee.birthdayDate.toString().split('T')[0];
+            employee.employmentDate = employee.employmentDate.toString().split('T')[0];
+        });
     }
 
     filterHandler() {
@@ -197,6 +160,7 @@ export class EmployeesComponent implements OnInit {
             this.employee = activeEmployee;
         }
         else {
+            this.reset();
             this.activeMode = 'create';
         }
         this.activeDialog = dialog;
@@ -223,6 +187,12 @@ export class EmployeesComponent implements OnInit {
         return result;
     }
 
+    cancelHandler() {
+        this.reset();
+        this.closeDialog(this.activeDialog);
+        this.loadEmployees()
+    }
+
     openDialog(dialog) {
         dialog.showModal();
     }
@@ -235,7 +205,9 @@ export class EmployeesComponent implements OnInit {
     @ViewChild('createEditForm') createEditForm: ElementRef;
     closeDialogOnClickOutside(event, dialog) {
         if (event.target === dialog && !this.createEditForm.nativeElement.contains(event.target)) {
-            this.closeDialog(dialog);
+            this.reset();
+            this.closeDialog(this.activeDialog);
+            this.loadEmployees()
         }
     }
 
